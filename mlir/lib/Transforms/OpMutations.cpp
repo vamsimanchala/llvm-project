@@ -126,6 +126,16 @@ void mlir::getOpMutations(Operation *op_before, Operation *op_after,
               loc_to_op_map_before[fused_loc.getLocations()[loc_idx]]);
         }
         llvm::outs() << "\n";
+      } else if (auto callsite_loc = opIt->getLoc().dyn_cast<CallSiteLoc>()) {
+        // 2.3. Check if the Op in AFTER is a result of inlining. Get the
+        // original inlined location in BEFORE. Delete the fused Ops from the
+        // loc_to_op_map_before and op_to_loc_map_before maps
+        llvm::outs() << "Inlining of-";
+        llvm::outs()
+            << " " << loc_to_op_map_before[callsite_loc.getCallee()]->getName();
+        mutated_ops_before.push_back(
+            loc_to_op_map_before[callsite_loc.getCallee()]);
+        llvm::outs() << "\n";
       }
 
       for (Operation *m_op : mutated_ops_before) {
