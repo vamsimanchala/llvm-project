@@ -14,6 +14,7 @@
 #ifndef MLIR_TRANSFORMS_LOCATIONSNAPSHOT_H
 #define MLIR_TRANSFORMS_LOCATIONSNAPSHOT_H
 
+#include "mlir/IR/IRMutations.h"
 #include "mlir/Support/LLVM.h"
 #include "llvm/ADT/StringRef.h"
 

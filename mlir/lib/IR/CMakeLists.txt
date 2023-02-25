@@ -20,6 +20,7 @@ add_mlir_library(MLIRIR
   FunctionImplementation.cpp
   FunctionInterfaces.cpp
   IntegerSet.cpp
+  IRMutations.cpp
   Location.cpp
   MLIRContext.cpp
   Operation.cpp

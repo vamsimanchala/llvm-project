@@ -76,7 +76,11 @@ public:
   }
 
   /// Clears all mappings held by the mapper.
-  void clear() { valueMap.clear(); }
+  void clear() {
+    valueMap.clear();
+    blockMap.clear();
+    operationMap.clear();
+  }
 
   /// Return the held value mapping.
   const DenseMap<Value, Value> &getValueMap() const { return valueMap; }
