@@ -1,3 +1,16 @@
+//===- IRMutations.h - IR Mutations Utilities ---------*- C++ -*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+//
+// This header file several utility methods for snapshotting the current IR to
+// produce new debug locations.
+//
+//===----------------------------------------------------------------------===//
+
 #ifndef THIRD_PARTY_LLVM_LLVM_PROJECT_MLIR_INCLUDE_MLIR_IR_IRMUTATIONS_H_
 #define THIRD_PARTY_LLVM_LLVM_PROJECT_MLIR_INCLUDE_MLIR_IR_IRMUTATIONS_H_
 
@@ -14,6 +27,11 @@ namespace mlir {
 
 using OpOrValueLocId = std::pair<StringRef, Location>;
 
+/// Base class to hold a single mutation object. This can be extended by
+/// different classes to represent specific mnutation types and hold any
+/// mutation specific information or metedata. For example- In a mutation object
+/// to used to record OpArgMutation, it may be useful to know index of the
+/// mutated openrand.
 class MutationBase {
  public:
   MutationBase();
@@ -79,6 +97,7 @@ class ConversionMut : public MutationBase {
   void printInternal() override { llvm::outs() << " converted"; };
 };
 
+/// Utility class to create the specific Mutation objects
 class MutationFactory {
  public:
   static std::unique_ptr<MutationBase>
@@ -106,6 +125,8 @@ class MutationFactory {
                       const OpOrValueLocId &fused_to);
 };
 
+/// Utility class that can be used to get the list of MutationBase objects after
+/// a pass, pipeline or a rewrite
 class IRMutationManager {
  public:
   IRMutationManager() = default;
