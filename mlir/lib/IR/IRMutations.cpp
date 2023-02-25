@@ -165,7 +165,7 @@ IRMutationManager::getMutations(Operation *op_current) {
       // evaluate these mutations as we have access to versions of Op/Module
       // before and after the transform and we should be able to apply
       // equivalance comparisions like this easily-
-      // https://source.corp.google.com/piper///depot/google3/third_party/llvm/llvm-project/mlir/lib/IR/OperationSupport.cpp;l=704-783
+      // llvm-project/mlir/lib/IR/OperationSupport.cpp;l=704-783
       // OperationEquivalence::isEquivalentTo
 
       // 1.1. Check if arguments are mutated
