@@ -128,17 +128,16 @@ std::unique_ptr<MutationBase> MutationFactory::createFusedMutation(
 //===----------------------------------------------------------------------===//
 /// IRMutationManager
 //===----------------------------------------------------------------------===//
-void IRMutationManager::reset(Operation *op_previous, const std::string &tag) {
+void IRMutationManager::reset(Operation *op, const std::string &tag) {
   clear();
-  op_previous->clone(ir_mapping);
-  op_to_op_map = ir_mapping.getOperationMap();
+  Operation *op_previous = op->clone(ir_mapping);
   // Map the locations to Ops from the original version of the
   // module. The locations in this module are guaranteed to be unique as they
   // are re-numbered just befor this function call.
-  for (auto &&op_pair : op_to_op_map) {
-    loc_to_op_map.insert({op_pair.second->getLoc(), op_pair.second});
-    op_to_loc_map.insert({op_pair.second, op_pair.second->getLoc()});
-  }
+  op_previous->walk([&](Operation *opIt) {
+    loc_to_op_map.insert({opIt->getLoc(), opIt});
+    op_to_loc_map.insert({opIt, opIt->getLoc()});
+  });
 }
 
 IRMutationManager::~IRMutationManager() { clear(); }
@@ -266,7 +265,6 @@ IRMutationManager::getMutations(Operation *op_current) {
 
 void IRMutationManager::clear() {
   ir_mapping.clear();
-  op_to_op_map.clear();
   loc_to_op_map.clear();
   op_to_loc_map.clear();
 }

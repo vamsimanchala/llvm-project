@@ -142,7 +142,6 @@ class IRMutationManager {
 
   std::string transform_tag;
   mlir::IRMapping ir_mapping;
-  DenseMap<Operation *, Operation *> op_to_op_map;
   DenseMap<Location, Operation *> loc_to_op_map;
   DenseMap<Operation *, Location> op_to_loc_map;
 };
