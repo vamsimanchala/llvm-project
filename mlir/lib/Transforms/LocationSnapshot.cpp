@@ -140,12 +140,25 @@ struct LocationSnapshotPass
 
   void runOnOperation() override {
     Operation *op = getOperation();
-    if (failed(generateLocationsFromIR(fileName, op, OpPrintingFlags(), tag)))
-      return signalPassFailure();
+    auto mutations_list = getMutationManager().getMutations(op);
+    for (auto &&it : mutations_list) {
+      it->print();
+    }
+
+    if (!mutations_list.empty()) {
+      if (failed(generateLocationsFromIR(fileName, op, OpPrintingFlags(), tag)))
+        return signalPassFailure();
+    }
+
+    getMutationManager().reset(op, std::string{});
   }
 
   /// The printing flags to use when creating the snapshot.
   OpPrintingFlags flags;
+  static IRMutationManager& getMutationManager(){
+    static IRMutationManager mutations;
+    return mutations;
+  };
 };
 } // namespace
 
